@@ -1,5 +1,5 @@
-import * as sorting from './scripts/sorting.js.js';
-import {swap} from './scripts/util.js.js';
+import * as sorting from './scripts/sorting.js';
+import {swap} from './scripts/util.js';
 
 // Canvas Setup
 
@@ -8,6 +8,9 @@ const height = 700;
 const width = 700;
 canvas.width = width;
 canvas.height = height;
+
+const startTime = 50;
+const audioLength = 100;
 
 const ctx = canvas.getContext('2d');
 
@@ -19,9 +22,19 @@ const colors = {
 };
 
 
-var arraySize = 100;
+
+var mySound = document.getElementById('sound');
+
+mySound.addEventListener('timeupdate', function(){
+    if(mySound.currentTime >= startTime/1000 + audioLength/1000){
+        console.log(mySound.currentTime);
+        mySound.pause();
+    }
+})
+
+var arraySize = 20;
 const minVal = 5;
-const maxValue = height - minVal;
+const maxVal = height - minVal;
 
 function generateRandomValues(maxVal, minVal)
 {
@@ -34,7 +47,7 @@ function generateRandomArray(arraySize){
 
     for(var i = 0; i < arraySize ; i++ )
     {
-        array.push(generateRandomValues(maxValue, minVal));
+        array.push(generateRandomValues(maxVal, minVal));
     }
 
     return array;
@@ -72,6 +85,20 @@ function drawRectangles()
 
 drawRectangles();
 
+function getSoundSrc(a, b){
+    let diff = Math.abs(a-b);
+
+    let maxDiff = maxVal - minVal;
+
+    let ans = Math.ceil((diff/maxDiff) * (2000 - 300) + 300);
+
+    ans = Math.ceil(ans/100)*100;
+
+    let src = ans+".wav";
+    return src;
+
+}
+
 function animate(animList)
 {   
     console.log(animList);
@@ -81,9 +108,16 @@ function animate(animList)
 
             ctx.clearRect(0,0,canvas.width, canvas.height);
             drawRectangles();
-            console.log(animList, i, animList[i]);
-            
-            if(animList[i].type=="comp")
+
+            if(animList[i].type=="rep")
+            {
+                drawSlab(animList[i].a, array[animList[i].a], colors["clear"]);
+                drawSlab(animList[i].b, array[animList[i].b], colors["clear"]);
+                [array[animList[i].a], array[animList[i].b]] = swap(array[animList[i].a], array[animList[i].b]);
+                drawSlab(animList[i].a, array[animList[i].a], colors["swap"]);
+                drawSlab(animList[i].b, array[animList[i].b], colors["swap"]);
+            }
+            else if(animList[i].type=="comp")
             {   
                 drawSlab(animList[i].a, array[animList[i].a], colors["comp"]);
                 drawSlab(animList[i].b, array[animList[i].b], colors["comp"]);
@@ -96,7 +130,26 @@ function animate(animList)
                 drawSlab(animList[i].b, array[animList[i].b], colors["swap"]);
             }
 
-        },i*10);
+            console.log(mySound.currentTime);
+            mySound.src = "./audio/" + getSoundSrc(array[animList[i].a], array[animList[i].b]);
+            console.log(mySound.src);
+
+            
+            
+            mySound.currentTime = startTime/1000;
+             var promise = mySound.play();
+
+             if (promise !== undefined) {
+                promise.then(_ => {
+                    // Autoplay started!
+                    console.log("playing");
+                }).catch(error => {
+                    console.log(mySound);
+                    console.log(error);
+                });
+            }
+
+        },1000 + i*100);
 
     }
 }

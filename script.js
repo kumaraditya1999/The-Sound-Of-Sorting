@@ -2,8 +2,8 @@ import * as sorting from './scripts/sorting.js';
 import {swap, generateRandomArray} from './scripts/util.js';
 
 // constants
-const height = 700;
-const width = 700;
+const height = 800;
+const width = 800;
 const colors = {    
     "comp": "red",
     "normal": "pink",
@@ -13,16 +13,18 @@ const colors = {
     "rep": "pink"
 };
 
-const arraySize = 100;
+
 const minVal = 5;
 const maxVal = height - minVal;
 const maxDiff = maxVal - minVal;
 const gap = 2;
-const barWidth = (width -  (gap) * (arraySize +1 ))/arraySize;
-const animTime = 10;
 const minFreq = 440;
 const maxFreq = 15000;
 
+// variables
+var arraySize;
+var barWidth;
+var animTime;
 
 
 // Canvas Setup
@@ -31,6 +33,12 @@ const canvas = document.getElementById("canvas");
 canvas.width = width;
 canvas.height = height;
 const ctx = canvas.getContext('2d');
+
+// dom elements
+const sizeBar = $("#size");
+const speedBar = $("#speed");
+const startButton = $("#start");
+const generateButton = $("#generate");
 
 // the array setup
 
@@ -136,6 +144,10 @@ function animate(animList,osc,audioCtx)
 
 function init()
 {   
+    arraySize = Number(sizeBar[0].value);
+    barWidth = (width -  (gap)* (arraySize +1 ))/arraySize;
+    animTime = Number(speedBar[0].max) - Number(speedBar[0].value) + Number(speedBar[0].min);
+
     clearScreen();
     array = [];
     generateRandomArray(array, arraySize, minVal, maxVal);
@@ -190,14 +202,21 @@ function start(){
 }
 
 
-$("#generate").click(function(){
+generateButton.click(function(){
     init();
 });
 
-$("#start").click(function(){
+startButton.click(function(){
     start();
 });
 
+sizeBar.on('change',function(){
+    init();
+});
+
+speedBar.on('change', function(){
+    animTime = Number(speedBar[0].max) - Number(speedBar[0].value) + Number(speedBar[0].min);
+});
 
 init();
 
@@ -206,7 +225,6 @@ init();
 /* TODO:
 0. Change the anim class
 1. Make the selection buttons
-2. Add sound
 3. Check merge sort for stray animation
 4. Completed marker
 */

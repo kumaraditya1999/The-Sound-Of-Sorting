@@ -2,8 +2,6 @@ import * as sorting from './scripts/sorting.js';
 import {swap, generateRandomArray} from './scripts/util.js';
 
 // constants
-const startTime = 50;
-const audioLength = 100;
 const height = 700;
 const width = 700;
 const colors = {    
@@ -15,12 +13,15 @@ const colors = {
     "rep": "pink"
 };
 
-const arraySize = 10;
+const arraySize = 100;
 const minVal = 5;
 const maxVal = height - minVal;
+const maxDiff = maxVal - minVal;
 const gap = 2;
 const barWidth = (width -  (gap) * (arraySize +1 ))/arraySize;
-const animTime = 50;
+const animTime = 10;
+const minFreq = 440;
+const maxFreq = 15000;
 
 
 
@@ -36,22 +37,12 @@ const ctx = canvas.getContext('2d');
 var array = [];
 var copyArray = [...array];
 var animList = [];
-var audioList = [];
 
 
+function getFrequency(diff){
 
-function getSoundSrc(a, b){
-    let diff = Math.abs(a-b);
-
-    let maxDiff = maxVal - minVal;
-
-    let ans = Math.ceil((diff/maxDiff) * (2000 - 300) + 300);
-
-    ans = Math.ceil(ans/100)*100;
-
-    let src = ans+".wav";
-    return src;
-
+    return Math.floor((diff/Math.pow(2*maxDiff,1)) * (maxFreq - minFreq)) + minFreq;
+    
 }
 
 //  the draw methods
@@ -78,9 +69,27 @@ function clearScreen()
 }
 
 function drawBars(i, type)
+{   
+    if(type=="rep")
+    {
+        drawSlab(animList[i].fi,animList[i].si,colors[type]);
+
+    }else{
+        drawSlab(animList[i].fi, array[animList[i].fi], colors[type]);
+        drawSlab(animList[i].si, array[animList[i].si], colors[type]);
+    }
+    
+}
+
+function clearBars(i)
 {
-    drawSlab(animList[i].a, array[animList[i].a], colors[type]);
-    drawSlab(animList[i].b, array[animList[i].b], colors[type]);
+    if(animList[i].type=="rep")
+    {
+        drawSlab(animList[i].fi, array[animList[i].fi], colors["clear"]);
+    }else{
+        drawSlab(animList[i].fi, array[animList[i].fi], colors["clear"]);
+        drawSlab(animList[i].si, array[animList[i].si], colors["clear"]);
+    }
 }
 
 function animate(animList,osc,audioCtx)
@@ -99,29 +108,28 @@ function animate(animList,osc,audioCtx)
             }
             else if(animList[i].type=="rep")
             {
-                drawBars(animList[i].a,"clear");
-                array[animList[i].a] = animList[i].b;
-                drawBars(animList[i].a,"rep");
+                clearBars(i);
+                array[animList[i].fi] = animList[i].si;
+                drawBars(i,"rep");
             }
             else
             {   
-                drawBars(i,"clear");
-                [array[animList[i].a], array[animList[i].b]] = swap(array[animList[i].a], array[animList[i].b]);
+                clearBars(i);
+                [array[animList[i].fi], array[animList[i].si]] = swap(array[animList[i].fi], array[animList[i].si]);
                 drawBars(i, "swap");
 
             }
 
+
+            osc.frequency.setValueAtTime(getFrequency( Math.pow(array[animList[i].fi] + animList[i].diff,1) ), audioCtx.currentTime + (i+1)*animTime/1000);
+
             if(i==animList.length-1){
                 clearScreen();
                 drawRectangles();
-                console.log(array);
+                animList = [];
             }
 
-            osc.frequency.setValueAtTime(440 + 100*i, audioCtx.currentTime + (i+1)*animTime/1000);
-
         },i*animTime);
-
-        
 
     }
 }
@@ -137,56 +145,55 @@ function init()
 }
 
 function start(){
+
+    // start audio
     let audioCtx = new AudioContext(); 
     let osc = audioCtx.createOscillator();
     osc.start();
     osc.connect(audioCtx.destination);
-    console.log("clicked");
+
+    animList = [];
+
     let choice = $("#algorithmMenu")[0].value;
     switch(choice) {
         case "Insertion Sort":
             console.log("Insertion Sort");
-            sorting.insertionSort(animList, copyArray, arraySize);
-            
-            animate(animList,osc,audioCtx);
-            osc.stop(animTime*animList.length/1000);
-            
+            sorting.insertionSort(animList, copyArray, arraySize);            
             break;
         case "Selection Sort":
             console.log("Selection Sort");
             sorting.selectionSort(animList, copyArray, arraySize);
-            animate(animList);
             break;
         case "Bubble Sort":
             console.log("Bubble Sort");
             sorting.bubbleSort(animList, copyArray, arraySize);
-            animate(animList);
             break;
         case "Merge Sort":
             console.log("Merge Sort");
             sorting.mergeSort(animList, copyArray, arraySize);
-            animate(animList);
             break;
         case "Quick Sort":
             console.log("Quick Sort");
             sorting.quickSort(animList, copyArray, arraySize);
-            animate(animList);
             break;
         case "Heap Sort":
             console.log("Heap Sort");
             sorting.heapSort(animList, copyArray, arraySize);
-            animate(animList);
             break;
         default:
             alert("Please Choose an Algorithm!!!");
         
     }
+
+    animate(animList,osc,audioCtx);
+    osc.stop(animTime*animList.length/1000);
 }
 
 
 $("#generate").click(function(){
     init();
 });
+
 $("#start").click(function(){
     start();
 });

@@ -1,4 +1,4 @@
-import {swap, insertIntoAnimList, generateRandomValues} from './util.js';
+import {swap, insert, generateRandomValues} from './util.js';
 
 // insertion sort
 
@@ -10,7 +10,7 @@ export function insertionSort(animList, arr, n){
         for( var j = i-1;j>=0;j--)
         {
             if(arr[ptr]<arr[j]){
-                insertIntoAnimList(animList,"swap",ptr,j);
+                insert(animList,"swap",ptr,j,arr[ptr]-arr[j]);
                 [arr[ptr],arr[j]] = swap(arr[ptr],arr[j]);
                 ptr=j;
             }else{
@@ -19,7 +19,6 @@ export function insertionSort(animList, arr, n){
         }
     }
 
-   console.log(arr,animList);
 }
 
 // selection sort
@@ -28,7 +27,6 @@ export function selectionSort(animList, arr, n)
 {  
     
     var i, j, min_idx;  
-    let temp;
 
     for (i = 0; i < n-1; i++)  
     {  
@@ -36,14 +34,14 @@ export function selectionSort(animList, arr, n)
         min_idx = i;  
         for (j = i+1; j < n; j++)
         {   
-            insertIntoAnimList(animList,"comp",j,min_idx);
+            insert(animList,"comp",j,min_idx,arr[j]-arr[min_idx]);
             if (arr[j] < arr[min_idx])
             {   
                 min_idx = j; 
             }   
         }
         
-        insertIntoAnimList(animList,"swap",i,min_idx);
+        insert(animList,"swap",i,min_idx, arr[i]-arr[min_idx]);
         [arr[min_idx], arr[i]] = swap(arr[min_idx], arr[i]);
     }
 }  
@@ -53,17 +51,17 @@ export function selectionSort(animList, arr, n)
 export function bubbleSort(animList, arr,n)  
 {   
     var i, j; 
-    let temp;
+    
     for (i = 0; i < n-1; i++)
     {
         for (j = 0; j < n-i-1; j++)  
         {
             if (arr[j] > arr[j+1])
             {   
-                insertIntoAnimList(animList,"swap",j,j+1);
+                insert(animList,"swap",j,j+1,arr[j]-arr[j+1]);
                 [arr[j], arr[j+1]] = swap(arr[j], arr[j+1]);
             } else {
-                insertIntoAnimList(animList,"comp",j,j+1);
+                insert(animList,"comp",j,j+1,arr[j]-arr[j+1]);
             } 
 
         }  
@@ -90,21 +88,21 @@ function merge(animList, arr, l, m, r)
     i = 0;
     j = 0;
     k = l;
-    let temp;
+
     while (i < n1 && j < n2) 
     {   
-        insertIntoAnimList(animList,"comp",m+1+j,l+i);
+        insert(animList,"comp",m+1+j,l+i,L[i]-R[j]);
         if (L[i] <= R[j]) 
         {
-            insertIntoAnimList(animList,"rep",k,L[i]);
-            insertIntoAnimList(animList,"comp",k,l+i);
+            insert(animList,"rep",k,L[i],arr[k]-L[i]);
+            insert(animList,"comp",k,l+i,arr[k]-L[i]);
             arr[k] = L[i];
             i++; 
         } 
         else
         {   
-            insertIntoAnimList(animList,"rep",k,R[j]);
-            insertIntoAnimList(animList,"comp",k,m+1+j);
+            insert(animList,"rep",k,R[j],arr[k]-R[j]);
+            insert(animList,"comp",k,m+1+j,arr[k]-R[j]);
             arr[k] = R[j]; 
             j++; 
         } 
@@ -113,8 +111,8 @@ function merge(animList, arr, l, m, r)
 
     while (i < n1) 
     {  
-        insertIntoAnimList(animList,"rep",k,L[i]);
-        insertIntoAnimList(animList,"comp",k,l+i);
+        insert(animList,"rep",k,L[i],arr[k]-L[i]);
+        insert(animList,"comp",k,l+i,arr[k]-L[i]);
         arr[k] = L[i]; 
         i++; 
         k++; 
@@ -122,9 +120,8 @@ function merge(animList, arr, l, m, r)
   
     while (j < n2) 
     {   
-
-        insertIntoAnimList(animList,"rep",k,R[j]);
-        insertIntoAnimList(animList,"comp",k,m+1+j);
+        insert(animList,"rep",k,R[j],arr[k]-R[j]);
+        insert(animList,"comp",k,m+1+j,arr[k]-R[j]);
         arr[k] = R[j];
         j++;
         k++; 
@@ -158,13 +155,13 @@ function partition(animList, arr, low, high)
     
         if (arr[j] <= pivot) { 
             i++;
-            insertIntoAnimList(animList,"swap",i,j);
+            insert(animList,"swap",i,j,arr[i]-arr[j]);
             [arr[i],arr[j]] = swap(arr[i],arr[j]);
         }else{
-            insertIntoAnimList(animList,"comp",j,high);
+            insert(animList,"comp",j,high,arr[j]-arr[high]);
         }
     }
-    insertIntoAnimList(animList,"swap",i+1,high);
+    insert(animList,"swap",i+1,high,arr[i+1]-arr[high]);
     [arr[i+1],arr[high]] = swap(arr[i+1],arr[high]);
 
     return (i + 1); 
@@ -174,7 +171,7 @@ function partition(animList, arr, low, high)
 function partition_r(animList, arr, low, high) 
 { 
     let random = generateRandomValues(low, high);
-    insertIntoAnimList(animList,"swap",random,high);
+    insert(animList,"swap",random,high,arr[random]-arr[high]);
     [arr[random], arr[high]] = swap(arr[random], arr[high]); 
     return partition(animList, arr, low, high);
 } 
@@ -210,11 +207,11 @@ function heapify(animList, arr, n, i)
    
     if (largest != i) 
     {   
-        insertIntoAnimList(animList,"swap",i,largest);
+        insert(animList,"swap",i,largest,arr[i]-arr[largest]);
         [arr[i], arr[largest]] = swap(arr[i], arr[largest]); 
         heapify(animList, arr, n, largest); 
     }else{
-        insertIntoAnimList(animList,"comp",largest,i);
+        insert(animList,"comp",largest,i,arr[i]-arr[largest]);
     } 
 } 
   
@@ -226,7 +223,7 @@ export function heapSort(animList, arr, n)
   
     for (let i=n-1; i>=0; i--) 
     { 
-        insertIntoAnimList(animList,"swap",0,i); 
+        insert(animList,"swap",0,i,arr[0]-arr[i]); 
         [arr[0],arr[i]] = swap(arr[0], arr[i]); 
   
         heapify(animList,arr, i, 0); 

@@ -1,20 +1,23 @@
+//  helper functions and classes
+
 export function swap(a, b){
     return [b, a];
 }
 
-export class anim
+export class Anim
 {
-    constructor(type,a,b)
+    constructor(type,fi,si,diff)
     {
         this.type = type;
-        this.a = a;
-        this.b = b;
+        this.fi = fi;
+        this.si = si;
+        this.diff = Math.abs(diff);
     }
 }
 
-export function insertIntoAnimList(animList,type,a,b)
+export function insert(animList,type,fi,si,diff)
 {
-    let temp = new anim(type,a,b);
+    let temp = new Anim(type,fi,si,diff);
     animList.push(temp);
 }
 

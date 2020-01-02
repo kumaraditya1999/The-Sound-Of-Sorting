@@ -22,26 +22,28 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <button class="btn btn-outline-success" type="button">Generate New Array</button>
+                <button class="btn btn-outline-success" type="button" id="generate">Generate New Array</button>
             </li>
             
-            <li class="nav-item">
-                <button class="btn btn-outline-success" type="button">Start</button>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Algorithm!!!
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Insertion Sort</a>
-                <a class="dropdown-item" href="#">Selection Sort</a>
+            <div class="input-group">
+              <select class="custom-select" id="algorithmMenu">
+                <option selected>Choose Your Algorithm...</option>
+                <option>Insertion Sort</option>
+                <option>Selection Sort</option>
+                <option>Bubble Sort</option>
+                <option>Merge Sort</option>
+                <option>Quick Sort</option>
+                <option>Heap Sort</option>
+              </select>
+              <div class="input-group-append">
+                <button class="btn btn-outline-success" type="button" id="start">Start</button>
               </div>
-            </li>
+            </div>
           </ul>
         </div>
       </nav>
 
-      <canvas id="canvas"></canvas>
+      <canvas id="canvas">Your Browser doesn't support Canvvas :(</canvas>
 
 
     <!-- Optional JavaScript -->

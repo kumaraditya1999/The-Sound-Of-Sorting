@@ -15,12 +15,12 @@ const colors = {
     "rep": "pink"
 };
 
-const arraySize = 100;
+const arraySize = 10;
 const minVal = 5;
 const maxVal = height - minVal;
 const gap = 2;
 const barWidth = (width -  (gap) * (arraySize +1 ))/arraySize;
-const animTime = 10;
+const animTime = 50;
 
 
 
@@ -31,16 +31,13 @@ canvas.width = width;
 canvas.height = height;
 const ctx = canvas.getContext('2d');
 
-
-
-
 // the array setup
 
 var array = [];
-generateRandomArray(array, arraySize, minVal, maxVal);
 var copyArray = [...array];
 var animList = [];
-sorting.bubbleSort(animList, copyArray, arraySize);
+var audioList = [];
+
 
 
 function getSoundSrc(a, b){
@@ -86,7 +83,7 @@ function drawBars(i, type)
     drawSlab(animList[i].b, array[animList[i].b], colors[type]);
 }
 
-function animate(animList)
+function animate(animList,osc,audioCtx)
 {   
     console.log(animList);
     for(let i = 0; i < animList.length; i++)
@@ -120,14 +117,83 @@ function animate(animList)
                 console.log(array);
             }
 
-        },1000 + i*animTime);
+            osc.frequency.setValueAtTime(440 + 100*i, audioCtx.currentTime + (i+1)*animTime/1000);
+
+        },i*animTime);
 
         
 
     }
 }
 
-animate(animList);
+function init()
+{   
+    clearScreen();
+    array = [];
+    generateRandomArray(array, arraySize, minVal, maxVal);
+    copyArray = [...array];
+    animList = [];
+    drawRectangles();
+}
+
+function start(){
+    let audioCtx = new AudioContext(); 
+    let osc = audioCtx.createOscillator();
+    osc.start();
+    osc.connect(audioCtx.destination);
+    console.log("clicked");
+    let choice = $("#algorithmMenu")[0].value;
+    switch(choice) {
+        case "Insertion Sort":
+            console.log("Insertion Sort");
+            sorting.insertionSort(animList, copyArray, arraySize);
+            
+            animate(animList,osc,audioCtx);
+            osc.stop(animTime*animList.length/1000);
+            
+            break;
+        case "Selection Sort":
+            console.log("Selection Sort");
+            sorting.selectionSort(animList, copyArray, arraySize);
+            animate(animList);
+            break;
+        case "Bubble Sort":
+            console.log("Bubble Sort");
+            sorting.bubbleSort(animList, copyArray, arraySize);
+            animate(animList);
+            break;
+        case "Merge Sort":
+            console.log("Merge Sort");
+            sorting.mergeSort(animList, copyArray, arraySize);
+            animate(animList);
+            break;
+        case "Quick Sort":
+            console.log("Quick Sort");
+            sorting.quickSort(animList, copyArray, arraySize);
+            animate(animList);
+            break;
+        case "Heap Sort":
+            console.log("Heap Sort");
+            sorting.heapSort(animList, copyArray, arraySize);
+            animate(animList);
+            break;
+        default:
+            alert("Please Choose an Algorithm!!!");
+        
+    }
+}
+
+
+$("#generate").click(function(){
+    init();
+});
+$("#start").click(function(){
+    start();
+});
+
+
+init();
+
 
 
 /* TODO:

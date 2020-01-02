@@ -193,3 +193,42 @@ export function quickSort(animList, arr, arraySize, low, high)
         quickSort(animList, arr, arraySize, pi + 1, high); 
     } 
 } 
+
+// heapsort
+
+function heapify(animList, arr, n, i) 
+{ 
+    let largest = i; 
+    let l = 2*i + 1; 
+    let r = 2*i + 2;
+  
+    if (l < n && arr[l] > arr[largest]) 
+        largest = l; 
+  
+    if (r < n && arr[r] > arr[largest]) 
+        largest = r; 
+   
+    if (largest != i) 
+    {   
+        insertIntoAnimList(animList,"swap",i,largest);
+        [arr[i], arr[largest]] = swap(arr[i], arr[largest]); 
+        heapify(animList, arr, n, largest); 
+    }else{
+        insertIntoAnimList(animList,"comp",largest,i);
+    } 
+} 
+  
+export function heapSort(animList, arr, n) 
+{ 
+
+    for (let i = n / 2 - 1; i >= 0; i--) 
+        heapify(animList, arr, n, i); 
+  
+    for (let i=n-1; i>=0; i--) 
+    { 
+        insertIntoAnimList(animList,"swap",0,i); 
+        [arr[0],arr[i]] = swap(arr[0], arr[i]); 
+  
+        heapify(animList,arr, i, 0); 
+    } 
+} 

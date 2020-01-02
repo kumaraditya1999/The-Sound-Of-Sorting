@@ -11,3 +11,9 @@ export class anim
         this.b = b;
     }
 }
+
+export function insertIntoAnimList(animList,type,a,b)
+{
+    let temp = new anim(type,a,b);
+    animList.push(temp);
+}

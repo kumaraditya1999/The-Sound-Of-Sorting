@@ -1,5 +1,5 @@
 import * as sorting from './scripts/sorting.js';
-import {swap, generateRandomArray} from './scripts/util.js';
+import {swap, generateRandomArray, shuffleArray} from './scripts/util.js';
 
 // constants
 const height = 800;
@@ -35,10 +35,13 @@ canvas.height = height;
 const ctx = canvas.getContext('2d');
 
 // dom elements
+
 const sizeBar = $("#size");
 const speedBar = $("#speed");
 const startButton = $("#start");
 const generateButton = $("#generate");
+const stopButton = $("#stop");
+const shuffle = $("#shuffle");
 
 // the array setup
 
@@ -46,6 +49,10 @@ var array = [];
 var copyArray = [...array];
 var animList = [];
 
+// the audio setup
+var audioCtx;
+var osc;
+var timeoutList = [];
 
 function getFrequency(diff){
 
@@ -105,7 +112,7 @@ function animate(animList,osc,audioCtx)
     console.log(animList);
     for(let i = 0; i < animList.length; i++)
     {
-        setTimeout( function timer(){
+        let myVar = setTimeout( function timer(){
 
             clearScreen();
             drawRectangles();
@@ -129,7 +136,7 @@ function animate(animList,osc,audioCtx)
             }
 
 
-            osc.frequency.setValueAtTime(getFrequency( Math.pow(array[animList[i].fi] + animList[i].diff,1) ), audioCtx.currentTime + (i+1)*animTime/1000);
+            osc.frequency.setValueAtTime(getFrequency( Math.pow(array[animList[i].fi] + animList[i].diff,1) ),(i)*animTime/1000);
 
             if(i==animList.length-1){
                 clearScreen();
@@ -138,6 +145,8 @@ function animate(animList,osc,audioCtx)
             }
 
         },i*animTime);
+
+        timeoutList.push(myVar);
 
     }
 }
@@ -158,13 +167,9 @@ function init()
 
 function start(){
 
-    // start audio
-    let audioCtx = new AudioContext(); 
-    let osc = audioCtx.createOscillator();
-    osc.start();
-    osc.connect(audioCtx.destination);
-
     animList = [];
+
+    let cntr = 1;
 
     let choice = $("#algorithmMenu")[0].value;
     switch(choice) {
@@ -197,10 +202,22 @@ function start(){
         
     }
 
-    animate(animList,osc,audioCtx);
-    osc.stop(animTime*animList.length/1000);
-}
+    if(cntr)
+    {
+        // start audio
+        audioCtx = new AudioContext(); 
+        osc = audioCtx.createOscillator();
+        osc.start();
+        osc.connect(audioCtx.destination);
 
+        // start animation
+        animate(animList,osc,audioCtx);
+
+        // stop sudio
+        osc.stop(animTime*animList.length/1000);
+    }
+        
+}
 
 generateButton.click(function(){
     init();
@@ -210,12 +227,29 @@ startButton.click(function(){
     start();
 });
 
-sizeBar.on('change',function(){
+sizeBar.on('input',function(){
     init();
 });
 
-speedBar.on('change', function(){
+speedBar.on('input', function(){
     animTime = Number(speedBar[0].max) - Number(speedBar[0].value) + Number(speedBar[0].min);
+});
+
+stopButton.click(function(){
+    for(var i = 0; i < timeoutList.length; i++)
+    {
+        clearTimeout(timeoutList[i]);
+    }
+    timeoutList = [];
+    osc.stop();
+    copyArray = [...array];
+});
+
+shuffle.click(function(){
+    shuffleArray(array,arraySize);
+    clearScreen();
+    drawRectangles();
+    copyArray = [...array];
 });
 
 init();

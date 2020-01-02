@@ -35,3 +35,12 @@ export function generateRandomArray(array, arraySize, minVal, maxVal)
     }
 
 }
+
+export function shuffleArray(arr, arraySize)
+{
+    for(var i=0;i<arraySize;i++)
+    {
+        let temp = generateRandomValues(0,i);
+        [arr[i],arr[temp]] = swap(arr[i],arr[temp]);
+    }
+}

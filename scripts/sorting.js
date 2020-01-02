@@ -14,6 +14,7 @@ export function insertionSort(animList, arr, n){
                 [arr[ptr],arr[j]] = swap(arr[ptr],arr[j]);
                 ptr=j;
             }else{
+                insert(animList,"comp",ptr,j,arr[ptr]-arr[j]);
                 break;
             }
         }
@@ -134,7 +135,7 @@ export function mergeSort(animList, arr, arraySize, l, r)
         l = 0;
         r = arraySize-1;
     }
-    // console.log("sorting",l,r);
+
     if (l < r) 
     { 
         let m = l + Math.floor((r-l)/2); 

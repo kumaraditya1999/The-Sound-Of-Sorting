@@ -1,5 +1,5 @@
 import * as sorting from './scripts/sorting.js';
-import {swap} from './scripts/util.js';
+import {swap, generateRandomArray} from './scripts/util.js';
 
 // constants
 const startTime = 50;
@@ -31,33 +31,16 @@ canvas.width = width;
 canvas.height = height;
 const ctx = canvas.getContext('2d');
 
-// array setup
-
-function generateRandomValues(maxVal, minVal)
-{
-    return Math.floor(Math.random() * ( maxVal - minVal + 1)) + minVal;
-}
-
-function generateRandomArray(arraySize)
-{
-
-    var array = [];
-
-    for(var i = 0; i < arraySize ; i++ )
-    {
-        array.push(generateRandomValues(maxVal, minVal));
-    }
-
-    return array;
-}
 
 
-// the animation array and array
 
-var array = generateRandomArray(arraySize);
+// the array setup
+
+var array = [];
+generateRandomArray(array, arraySize, minVal, maxVal);
 var copyArray = [...array];
 var animList = [];
-sorting.mergeSort(animList, copyArray, arraySize);
+sorting.bubbleSort(animList, copyArray, arraySize);
 
 
 function getSoundSrc(a, b){
@@ -131,8 +114,6 @@ function animate(animList)
 
             }
 
-            
-
             if(i==animList.length-1){
                 clearScreen();
                 drawRectangles();
@@ -154,4 +135,5 @@ animate(animList);
 1. Make the selection buttons
 2. Add sound
 3. Check merge sort for stray animation
+4. Completed marker
 */

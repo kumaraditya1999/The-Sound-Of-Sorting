@@ -1,4 +1,4 @@
-import {swap, insertIntoAnimList} from './util.js';
+import {swap, insertIntoAnimList, generateRandomValues} from './util.js';
 
 // insertion sort
 
@@ -147,3 +147,49 @@ export function mergeSort(animList, arr, arraySize, l, r)
     } 
 }
 
+// quicksort
+
+function partition(animList, arr, low, high) 
+{ 
+    var pivot = arr[high];
+    var i = (low - 1); 
+    
+    for (var j = low; j <= high - 1; j++) { 
+    
+        if (arr[j] <= pivot) { 
+            i++;
+            insertIntoAnimList(animList,"swap",i,j);
+            [arr[i],arr[j]] = swap(arr[i],arr[j]);
+        }else{
+            insertIntoAnimList(animList,"comp",j,high);
+        }
+    }
+    insertIntoAnimList(animList,"swap",i+1,high);
+    [arr[i+1],arr[high]] = swap(arr[i+1],arr[high]);
+
+    return (i + 1); 
+} 
+
+
+function partition_r(animList, arr, low, high) 
+{ 
+    let random = generateRandomValues(low, high);
+    insertIntoAnimList(animList,"swap",random,high);
+    [arr[random], arr[high]] = swap(arr[random], arr[high]); 
+    return partition(animList, arr, low, high);
+} 
+
+export function quickSort(animList, arr, arraySize, low, high) 
+{   
+    if (low == undefined) 
+    {
+        low = 0;
+        high = arraySize-1;
+    }
+    
+    if (low < high) {   
+        var pi = partition_r(animList, arr, low, high);
+        quickSort(animList, arr, arraySize, low, pi - 1); 
+        quickSort(animList, arr, arraySize, pi + 1, high); 
+    } 
+} 

@@ -44,6 +44,7 @@ const stopButton = $("#stop");
 const shuffle = $("#shuffle");
 const menu = $("#algorithmMenu");
 const error = $("#error-text");
+const oscillator = $("#oscillator");
 
 // the array setup
 
@@ -231,14 +232,15 @@ function start(){
             // start audio
             audioCtx = new AudioContext(); 
             osc = audioCtx.createOscillator();
-            osc.start();
+            osc.type = oscillator[0].value;
             osc.connect(audioCtx.destination);
-
+            osc.start();
+            
             // start animation
             error.addClass("no-display");
             animate(animList,osc,audioCtx);
 
-            // stop sudio
+            // stop audio
             osc.stop(animTime*animList.length/1000);
         }
         

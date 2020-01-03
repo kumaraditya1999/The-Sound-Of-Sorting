@@ -2,8 +2,8 @@ import * as sorting from './scripts/sorting.js';
 import {swap, generateRandomArray, shuffleArray} from './scripts/util.js';
 
 // constants
-const height = 800;
-const width = 900;
+const width = Math.ceil(window.innerWidth * .80);
+const height = Math.floor(Math.min(window.innerHeight * .80,width));
 const colors = {    
     "comp": "red",
     "normal": "pink",
@@ -17,7 +17,7 @@ const colors = {
 const minVal = 5;
 const maxVal = height - minVal;
 const maxDiff = maxVal - minVal;
-const gap = 1;
+var gap = 1;
 const minFreq = 440;
 const maxFreq = 15000;
 
@@ -25,14 +25,16 @@ const maxFreq = 15000;
 var arraySize;
 var barWidth;
 var animTime;
+var offset;
 
 
 // Canvas Setup
 
 const canvas = document.getElementById("canvas");
-canvas.width = width;
-canvas.height = height;
+canvas.width = width+10;
+canvas.height = height+10;
 const ctx = canvas.getContext('2d');
+const borderWidth = 2;
 
 // dom elements
 
@@ -72,8 +74,34 @@ function drawSlab(pos, height, color)
 {
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.rect(gap*(pos+1) + barWidth*pos, 0, barWidth, height);
+    ctx.rect(offset + gap + gap*(pos+1) + barWidth*pos, borderWidth, barWidth, height);
     ctx.fill();
+}
+
+function drawBorders()
+{
+    ctx.fillStyle = "black";
+    // horizontal up
+    ctx.beginPath();
+    ctx.rect(offset - gap , 0, width - 2*offset + 6*gap, borderWidth);
+    ctx.fill();
+
+    // horizontal down
+    ctx.beginPath();
+    ctx.rect(offset - gap , height-borderWidth, width - 2*offset + 6*gap, borderWidth);
+    ctx.fill();
+
+    // vertical left
+    ctx.beginPath();
+    ctx.rect(offset - gap , 0, borderWidth, height - borderWidth);
+    ctx.fill();
+
+    // vertical right
+    ctx.beginPath();
+    ctx.rect(width - offset + 3*gap , 0, borderWidth, height - borderWidth);
+    ctx.fill();
+
+
 }
 
 function drawRectangles()
@@ -85,6 +113,8 @@ function drawRectangles()
         else
             drawSlab(i, array[i], colors["placed"]);
     }
+
+    drawBorders();
 }
 
 function clearScreen()
@@ -167,8 +197,17 @@ function animate(animList,osc)
 function init()
 {   
     arraySize = Number(sizeBar[0].value);
-    barWidth = (width -  (gap)* (arraySize +1 ))/arraySize;
+    barWidth = Math.floor((width -  (gap)* (arraySize +1 ))/arraySize);
     animTime = getSpeed(Number(speedBar[0].value));
+    offset  = Math.round((width -  barWidth*arraySize - gap*(arraySize-1))/2);
+
+    if(barWidth==0){
+        barWidth = (width -  (gap)* (arraySize +1 ))/arraySize;
+        offset=0;
+        gap=0;
+    }else{
+        gap=1;
+    }
 
     noOfElements[0].innerText = sizeBar[0].value;
     speedOfAnimation[0].innerText = Math.ceil(100/animTime) + " ops";

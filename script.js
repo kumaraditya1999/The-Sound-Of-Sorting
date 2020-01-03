@@ -281,6 +281,10 @@ function start(){
             console.log("Tim Sort");
             sorting.timSort(animList, copyArray, arraySize);
             break;
+        case "Comb Sort":
+            console.log("Comb Sort");
+            sorting.combSort(animList,copyArray, arraySize);
+            break;
         default:
             cntr=0;
             enableButtons();

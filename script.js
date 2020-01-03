@@ -43,6 +43,7 @@ const generateButton = $("#generate");
 const stopButton = $("#stop");
 const shuffle = $("#shuffle");
 const menu = $("#algorithmMenu");
+const error = $("#error-text");
 
 // the array setup
 
@@ -178,6 +179,8 @@ function start(){
     var cntr = 1;
 
     let choice = menu[0].value;
+    error.removeClass("no-display");
+
     switch(choice) {
         case "Insertion Sort":
             console.log("Insertion Sort");
@@ -206,7 +209,6 @@ function start(){
         default:
             cntr=0;
             enableButtons();
-            alert("Please Choose an Algorithm!!!");
             
         
     }
@@ -220,6 +222,7 @@ function start(){
             osc.connect(audioCtx.destination);
 
             // start animation
+            error.addClass("no-display");
             animate(animList,osc,audioCtx);
 
             // stop sudio
@@ -231,26 +234,50 @@ function start(){
 function disableButtons()
 {   
     speedBar.attr("disabled",true);
+    speedBar.addClass("disabled");
+
     sizeBar.attr("disabled",true);
+    sizeBar.addClass("disabled");
+
     startButton.attr("disabled",true);
+    startButton.addClass("disabled");
+
     generateButton.attr("disabled",true);
+    generateButton.addClass("disabled");
+
     menu.attr("disabled",true);
+    menu.addClass("disabled");
+
     shuffle.attr("disabled",true);
+    shuffle.addClass("disabled");
 
     stopButton.attr("disabled",false);
+    stopButton.removeClass("disabled");
 
 }
 
 function enableButtons()
 {   
     speedBar.attr("disabled",false);
+    speedBar.removeClass("disabled");
+
     sizeBar.attr("disabled",false);
+    sizeBar.removeClass("disabled");
+
     startButton.attr("disabled",false);
+    startButton.removeClass("disabled");
+
     generateButton.attr("disabled",false);
+    generateButton.removeClass("disabled");
+
     menu.attr("disabled",false);
+    menu.removeClass("disabled");
+
     shuffle.attr("disabled",false);
+    shuffle.removeClass("disabled");
 
     stopButton.attr("disabled",true);
+    stopButton.addClass("disabled");
 }
 
 generateButton.click(function(){

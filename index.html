@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" href="main.css">
-    <title>Sorting Visualiser</title>
+    <title>The Sound of Sorting Visualiser</title>
   </head>
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <h1 class="navbar-brand"><b>Sorting Visualiser</b></h1>
+      <h1 class="navbar-brand"><b>The Sound Of Sorting</b></h1>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -44,6 +44,7 @@
                 <button class="btn btn-success" type="button" id="start">Start</button>
               </div>
             </div>
+            <span class="text-danger no-display" id="error-text">* select an algorithm</span>
           </li>
 
           <li class="nav-item">
@@ -53,7 +54,7 @@
           <li class="nav-item">
             <div class="form-group">
               <label for="speed"><b>Speed Of Animation</b></label>
-              <input type="range" min="5" max="200" value="105" class="slider" id="speed" width="100%">
+              <input type="range" min="5" max="200" value="200" class="slider" id="speed" width="100%">
             </div>
           </li>
 

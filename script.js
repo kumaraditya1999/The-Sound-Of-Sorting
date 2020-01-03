@@ -201,10 +201,11 @@ function init()
     animTime = getSpeed(Number(speedBar[0].value));
     offset  = Math.round((width -  barWidth*arraySize - gap*(arraySize-1))/2);
 
-    if(barWidth==0){
+    if(width <= 640){
+        // for small screen
+        gap=0;
         barWidth = (width -  (gap)* (arraySize +1 ))/arraySize;
         offset=0;
-        gap=0;
     }else{
         gap=1;
     }

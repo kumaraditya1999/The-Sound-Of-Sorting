@@ -2,12 +2,22 @@ import {swap, insert, generateRandomValues} from './util.js';
 
 // insertion sort
 
-export function insertionSort(animList, arr, n){
+export function insertionSort(animList, arr, n, left, right){
+
+    let st = 0, en = n-1;
+    let cntr = 1;
+
+    if(left!=undefined)
+    {
+        st = left;
+        en = right;
+        cntr=0;
+    }
     
-    for( var i = 1; i < n; i++ )
+    for( var i = st+1; i <= en; i++ )
     {
         let ptr = i;
-        for( var j = i-1;j>=0;j--)
+        for( var j = i-1;j>=st;j--)
         {
             if(arr[ptr]<arr[j]){
                 insert(animList,"swap",ptr,j,arr[ptr]-arr[j]);
@@ -20,8 +30,9 @@ export function insertionSort(animList, arr, n){
         }
     }
 
-    for( var i = n-1; i >=0; i--)
-        insert(animList,"comp",i,i,arr[i],i);  
+    if(cntr)
+        for( var i = n-1; i >=0; i--)
+            insert(animList,"comp",i,i,arr[i],i);  
 
 }
 
@@ -375,3 +386,23 @@ export function shellSort(animList, arr, n)
         insert(animList,"comp",i,i,arr[i],i); 
 
 } 
+
+// Tim Sort 
+
+export function timSort(animList, arr, n) 
+{ 
+    const RUN = 32;
+
+    for (let i = 0; i < n; i+=RUN) 
+        insertionSort(animList, arr, 0 , i, Math.min((i+31), (n-1))); 
+    
+    for (let size = RUN; size < n; size = 2*size) 
+    { 
+        for (let left = 0; left < n; left += 2*size) 
+        { 
+            let mid = left + size - 1; 
+            let right = Math.min((left + 2*size - 1), (n-1)); 
+            merge(animList, arr, left, mid, right); 
+        }
+    } 
+}

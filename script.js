@@ -277,6 +277,10 @@ function start(){
             console.log("Shell Sort");
             sorting.shellSort(animList, copyArray, arraySize);
             break;
+        case "Tim Sort":
+            console.log("Tim Sort");
+            sorting.timSort(animList, copyArray, arraySize);
+            break;
         default:
             cntr=0;
             enableButtons();

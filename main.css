@@ -1,3 +1,39 @@
 #canvas{
     border: 2px solid black;
+    margin: 10px;
 }
+
+.nav-item{
+
+  padding-top: 1rem;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 75%;
+    height: 5px;
+    border-radius: 1px;  
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%; 
+    background: #4CAF50;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+  }

@@ -17,7 +17,7 @@ const colors = {
 const minVal = 5;
 const maxVal = height - minVal;
 const maxDiff = maxVal - minVal;
-const gap = 2;
+const gap = 1.5;
 const minFreq = 440;
 const maxFreq = 15000;
 
@@ -42,6 +42,7 @@ const startButton = $("#start");
 const generateButton = $("#generate");
 const stopButton = $("#stop");
 const shuffle = $("#shuffle");
+const menu = $("#algorithmMenu");
 
 // the array setup
 
@@ -56,7 +57,7 @@ var timeoutList = [];
 
 function getFrequency(diff){
 
-    return Math.floor((diff/Math.pow(2*maxDiff,1)) * (maxFreq - minFreq)) + minFreq;
+    return Math.floor((diff/Math.pow(maxDiff,1)) * (maxFreq - minFreq)) + minFreq;
     
 }
 
@@ -107,9 +108,8 @@ function clearBars(i)
     }
 }
 
-function animate(animList,osc,audioCtx)
+function animate(animList,osc)
 {   
-    console.log(animList);
     for(let i = 0; i < animList.length; i++)
     {
         let myVar = setTimeout( function timer(){
@@ -135,12 +135,12 @@ function animate(animList,osc,audioCtx)
 
             }
 
-
-            osc.frequency.setValueAtTime(getFrequency( Math.pow(array[animList[i].fi] + animList[i].diff,1) ),(i)*animTime/1000);
+            osc.frequency.setValueAtTime(getFrequency( Math.pow(animList[i].diff,1) ),(i)*animTime/1000);
 
             if(i==animList.length-1){
                 clearScreen();
                 drawRectangles();
+                enableButtons();
                 animList = [];
             }
 
@@ -155,7 +155,7 @@ function init()
 {   
     arraySize = Number(sizeBar[0].value);
     barWidth = (width -  (gap)* (arraySize +1 ))/arraySize;
-    animTime = Number(speedBar[0].max) - Number(speedBar[0].value) + Number(speedBar[0].min);
+    animTime = getSpeed(Number(speedBar[0].value));
 
     clearScreen();
     array = [];
@@ -165,13 +165,19 @@ function init()
     drawRectangles();
 }
 
+function getSpeed()
+{   
+    return Number(speedBar[0].max) - Number(speedBar[0].value) + Number(speedBar[0].min);
+}
+
 function start(){
+
 
     animList = [];
 
-    let cntr = 1;
+    var cntr = 1;
 
-    let choice = $("#algorithmMenu")[0].value;
+    let choice = menu[0].value;
     switch(choice) {
         case "Insertion Sort":
             console.log("Insertion Sort");
@@ -198,25 +204,53 @@ function start(){
             sorting.heapSort(animList, copyArray, arraySize);
             break;
         default:
+            cntr=0;
+            enableButtons();
             alert("Please Choose an Algorithm!!!");
+            
         
     }
 
-    if(cntr)
-    {
-        // start audio
-        audioCtx = new AudioContext(); 
-        osc = audioCtx.createOscillator();
-        osc.start();
-        osc.connect(audioCtx.destination);
+        if(cntr)
+        {
+            // start audio
+            audioCtx = new AudioContext(); 
+            osc = audioCtx.createOscillator();
+            osc.start();
+            osc.connect(audioCtx.destination);
 
-        // start animation
-        animate(animList,osc,audioCtx);
+            // start animation
+            animate(animList,osc,audioCtx);
 
-        // stop sudio
-        osc.stop(animTime*animList.length/1000);
-    }
+            // stop sudio
+            osc.stop(animTime*animList.length/1000);
+        }
         
+}
+
+function disableButtons()
+{   
+    speedBar.attr("disabled",true);
+    sizeBar.attr("disabled",true);
+    startButton.attr("disabled",true);
+    generateButton.attr("disabled",true);
+    menu.attr("disabled",true);
+    shuffle.attr("disabled",true);
+
+    stopButton.attr("disabled",false);
+
+}
+
+function enableButtons()
+{   
+    speedBar.attr("disabled",false);
+    sizeBar.attr("disabled",false);
+    startButton.attr("disabled",false);
+    generateButton.attr("disabled",false);
+    menu.attr("disabled",false);
+    shuffle.attr("disabled",false);
+
+    stopButton.attr("disabled",true);
 }
 
 generateButton.click(function(){
@@ -224,6 +258,7 @@ generateButton.click(function(){
 });
 
 startButton.click(function(){
+    disableButtons();
     start();
 });
 
@@ -232,7 +267,7 @@ sizeBar.on('input',function(){
 });
 
 speedBar.on('input', function(){
-    animTime = Number(speedBar[0].max) - Number(speedBar[0].value) + Number(speedBar[0].min);
+    animTime = getSpeed(Number(speedBar[0].value));
 });
 
 stopButton.click(function(){
@@ -241,7 +276,8 @@ stopButton.click(function(){
         clearTimeout(timeoutList[i]);
     }
     timeoutList = [];
-    osc.stop();
+    osc.stop()
+    enableButtons();
     copyArray = [...array];
 });
 
@@ -257,8 +293,5 @@ init();
 
 
 /* TODO:
-0. Change the anim class
-1. Make the selection buttons
-3. Check merge sort for stray animation
 4. Completed marker
 */

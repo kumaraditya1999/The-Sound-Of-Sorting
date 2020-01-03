@@ -14,20 +14,22 @@
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Sorting Visualiser</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <button class="btn btn-outline-success" type="button" id="generate">Generate New Array</button>
-            </li>
-            <li class="nav-item">
-              <button class="btn btn-outline-success" type="button" id="shuffle">Shuffle</button>
-            </li>
-            
+      <h1 class="navbar-brand"><b>Sorting Visualiser</b></h1>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto nav-fill w-100">
+          <li class="nav-item">
+              <button class="btn btn-success" type="button" id="generate">Generate New Array</button>
+          </li>
+
+          <li class="nav-item">
+            <button class="btn btn-success" type="button" id="shuffle">Shuffle</button>
+          </li>
+          
+          <li class="nav-item">
             <div class="input-group">
               <select class="custom-select" id="algorithmMenu">
                 <option selected>Choose Your Algorithm...</option>
@@ -39,27 +41,40 @@
                 <option>Heap Sort</option>
               </select>
               <div class="input-group-append">
-                <button class="btn btn-outline-success" type="button" id="start">Start</button>
+                <button class="btn btn-success" type="button" id="start">Start</button>
               </div>
             </div>
-            <div class="input-group">
-              slow
-              <input type="range" min="5" max="200" value="105" class="slider" id="speed">
-              fast
-            </div>
-            <div class="input-group">
-              small
-              <input type="range" min="10" max="200" value="100" class="slider" id="size">
-              large
-            </div>
-            <li class="nav-item">
-              <button class="btn btn-outline-success" type="button" id="stop">stop</button>
-            </li>
-          </ul>
-        </div>
-      </nav>
+          </li>
 
-      <canvas id="canvas">Your Browser doesn't support Canvvas :(</canvas>
+          <li class="nav-item">
+            <button class="btn btn-danger" type="button" id="stop">stop</button>
+          </li>
+
+          <li class="nav-item">
+            <div class="form-group">
+              <label for="speed"><b>Speed Of Animation</b></label>
+              <input type="range" min="5" max="200" value="105" class="slider" id="speed" width="100%">
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <div class="form-group">
+              <label for="size"><b>Number of Elements</b></label>
+              <input type="range" min="10" max="200" value="100" class="slider" id="size">
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+    
+      <div class="row">
+        <div class="col">
+        <canvas id="canvas">Your Browser doesn't support Canvvas :(</canvas>
+      </div>
+
+    </div>
 
 
     <!-- Optional JavaScript -->

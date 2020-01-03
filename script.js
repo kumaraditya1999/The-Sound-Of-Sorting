@@ -58,7 +58,7 @@ var animList = [];
 var placed = [];
 
 // the audio setup
-var audioCtx;
+var audioCtx = new AudioContext();
 var osc;
 var timeoutList = [];
 
@@ -285,6 +285,18 @@ function start(){
             console.log("Comb Sort");
             sorting.combSort(animList,copyArray, arraySize);
             break;
+        case "Pigeonhole Sort":
+            console.log("Pigeonhole Sort");
+            sorting.pigeonholeSort(animList, copyArray, arraySize);
+            break;
+        case "Cocktail Sort":
+            console.log("Cocktail Sort");
+            sorting.cocktailSort(animList, copyArray, arraySize);
+            break;
+        case "Pancake Sort":
+            console.log("Pancake Sort");
+            sorting.pancakeSort(animList, copyArray, arraySize);
+            break;
         default:
             cntr=0;
             enableButtons();
@@ -399,3 +411,5 @@ shuffle.click(function(){
 
 init();
 
+// TODO:
+// 1. Figure Out Bucket Sort

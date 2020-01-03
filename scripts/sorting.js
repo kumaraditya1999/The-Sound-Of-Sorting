@@ -68,13 +68,14 @@ export function selectionSort(animList, arr, n)
 export function bubbleSort(animList, arr,n)  
 {   
     var i, j; 
-    
+    let swapped = false;
     for (i = 0; i < n-1; i++)
-    {
+    {   
+        swapped = false;
         for (j = 0; j < n-i-1; j++)  
         {
             if (arr[j] > arr[j+1])
-            {   
+            {   swapped = true;
                 insert(animList,"swap",j,j+1,arr[j]-arr[j+1]);
                 [arr[j], arr[j+1]] = swap(arr[j], arr[j+1]);
             } else {
@@ -82,9 +83,17 @@ export function bubbleSort(animList, arr,n)
             } 
 
         }
-        insert(animList,"comp",n-i-1,n-i-1,0,n-i-1);  
-    } 
-    insert(animList,"comp",0,0,0,0);     
+        insert(animList,"comp",n-i-1,n-i-1,arr[n-i-1],n-i-1);
+        
+        if(!swapped)
+            break;
+    }
+    j--;
+    i=j;
+    while(i>=0){
+        insert(animList,"comp",i,i,arr[i],i);
+        i--;
+    }
         
 }  
 
@@ -447,4 +456,140 @@ export function combSort(animList, arr, n)
         insert(animList,"comp",i,i,arr[i],i);
 
 
+}
+
+// Pigeonhole Sort
+
+export function pigeonholeSort(animList, arr, n) 
+{ 
+    let min = Math.min(...arr), max = Math.max(...arr);  
+    let range = max - min + 1;
+  
+    let holes = [];
+
+
+    for(let i=0; i<range;i++)
+        holes.push([]);
+  
+    for (let i = 0; i < n; i++)
+    {   
+        holes[arr[i]-min].push(arr[i]);
+        insert(animList,"comp",i,i,arr[i]);
+    }
+         
+    let index = 0;   
+    for (let i = 0; i < range; i++) 
+    {  
+       for (let j = 0; j < holes[i].length; ++j)
+       {    
+            insert(animList,"rep",index,holes[i][j],arr[index]-holes[i][j],index);
+            arr[index]  = holes[i][j];
+            index++;
+       }
+             
+    } 
+}
+
+// Cocktail Sort
+
+export function cocktailSort(animList, arr, n) 
+{ 
+    let swapped = true; 
+    let start = 0; 
+    let end = n - 1;
+
+    let cntr=0;
+  
+    while (swapped) { 
+
+        swapped = false; 
+  
+        for (let i = start; i < end; ++i) { 
+            if (arr[i] > arr[i + 1]) {
+                insert(animList,"swap",i,i+1,arr[i]-arr[i+1]);
+                [arr[i],arr[i+1]] = swap(arr[i], arr[i + 1]);
+                swapped = true; 
+            }else{
+                insert(animList,"comp",i,i+1,arr[i]-arr[i+1]);
+            } 
+        }
+
+        cntr++;
+  
+        if (!swapped) 
+            break; 
+  
+        swapped = false;
+
+        insert(animList,"comp",end,end,arr[end],end);
+        --end; 
+  
+        for (let i = end - 1; i >= start; --i) { 
+            if (arr[i] > arr[i + 1]) { 
+                insert(animList,"swap",i,i+1,arr[i]-arr[i+1]);
+                [arr[i], arr[i+1]] = swap(arr[i], arr[i + 1]); 
+                swapped = true; 
+            }else{
+                insert(animList,"comp",i,i+1,arr[i]-arr[i+1]);
+            }
+        } 
+
+        cntr++;
+        
+        insert(animList,"comp",start,start,arr[start],start);
+        ++start; 
+    }
+
+    if(cntr%2)
+    {
+        for(let i=end;i>=start;i--)
+            insert(animList,"comp",i,i,arr[i],i);
+    }else{
+        for(let i=start;i<=end;i++)
+            insert(animList,"comp",i,i,arr[i],i);
+    }
+} 
+
+// Pancake Sort
+
+function flip(animList, arr, i) 
+{ 
+    let start = 0; 
+    while (start < i) 
+    { 
+        insert(animList,"swap",start,i,arr[start]-arr[i]);
+        [arr[i],arr[start]]=swap(arr[i],arr[start]); 
+        start++; 
+        i--; 
+    } 
+} 
+  
+
+function findMax(animList, arr, n) 
+{ 
+    let mi, i; 
+    for (mi = 0, i = 0; i < n; ++i){
+        if (arr[i] > arr[mi])
+            mi = i;
+
+        insert(animList, "comp", i, mi, arr[i]-arr[mi]);
+    }
+           
+    return mi; 
+} 
+  
+export function pancakeSort(animList, arr, n) 
+{ 
+
+    for (let curr_size = n; curr_size >= 1; --curr_size) 
+    { 
+        let mi = findMax(animList, arr, curr_size); 
+  
+        if (mi != curr_size-1) 
+        { 
+            flip(animList, arr, mi);
+            flip(animList, arr, curr_size-1);
+        }
+        insert(animList, "comp", curr_size-1,curr_size-1,arr[curr_size-1],curr_size-1);
+    } 
 }

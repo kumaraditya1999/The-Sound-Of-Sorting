@@ -273,6 +273,10 @@ function start(){
             console.log("Count Sort");
             sorting.countSort(animList, copyArray, arraySize);
             break;
+        case "Shell Sort":
+            console.log("Shell Sort");
+            sorting.shellSort(animList, copyArray, arraySize);
+            break;
         default:
             cntr=0;
             enableButtons();

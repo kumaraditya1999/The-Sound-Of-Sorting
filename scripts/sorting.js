@@ -346,3 +346,32 @@ export function countSort(animList, arr, n)
     }
             
 } 
+
+// shell sort
+
+export function shellSort(animList, arr, n) 
+{ 
+
+    for (let gap = n/2; gap > 0; gap = Math.floor(gap/2)) 
+    { 
+        for (let i = gap; i < n; i += 1) 
+        { 
+            let temp = arr[i]; 
+  
+            let j;             
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)
+            {   
+                insert(animList,"comp",i,j,arr[j-gap]-temp);
+                insert(animList,"rep",j,arr[j-gap],arr[j]-arr[j-gap]);
+                arr[j] = arr[j - gap];
+            } 
+                 
+            insert(animList,"rep",j,temp,arr[j]-temp); 
+            arr[j] = temp; 
+        } 
+    } 
+
+    for( var i = 0; i < n; i++)
+        insert(animList,"comp",i,i,arr[i],i); 
+
+} 

@@ -322,7 +322,7 @@ sizeBar.on('input',function(){
 
 speedBar.on('input', function(){
     animTime = getSpeed(Number(speedBar[0].value));
-    speedOfAnimation[0].innerText = 1000/animTime + " ops";
+    speedOfAnimation[0].innerText = Math.round(1000/animTime) + " ops";
 });
 
 stopButton.click(function(){

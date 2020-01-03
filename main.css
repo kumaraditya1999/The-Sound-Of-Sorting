@@ -1,6 +1,7 @@
 #canvas{
     border: 2px solid black;
     margin: 10px;
+    margin-left: 10%;
 }
 
 .nav-item{
@@ -43,4 +44,20 @@
 
 .no-display{
     display: none;
+}
+
+.love{
+    color: rgb(129, 22, 22);
+}
+
+.footer-link{
+    color: rgb(51, 51, 51) !important;
+}
+
+.footer-link:hover{
+    color: rgb(129, 22, 22) !important;
+}
+
+a:link{
+    text-decoration: none;
 }

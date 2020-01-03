@@ -50,6 +50,7 @@ const error = $("#error-text");
 var array = [];
 var copyArray = [...array];
 var animList = [];
+var placed = [];
 
 // the audio setup
 var audioCtx;
@@ -76,7 +77,10 @@ function drawRectangles()
 {
     for(var i = 0; i < arraySize; i++)
     {   
-        drawSlab(i, array[i], colors["normal"]);
+        if(!placed[i])
+            drawSlab(i, array[i], colors["normal"]);
+        else
+            drawSlab(i, array[i], colors["placed"]);
     }
 }
 
@@ -136,6 +140,11 @@ function animate(animList,osc)
 
             }
 
+            if(animList[i].pl!=undefined)
+            {   
+                placed[animList[i].pl] = 1;
+            }
+
             osc.frequency.setValueAtTime(getFrequency( Math.pow(animList[i].diff,1) ),(i)*animTime/1000);
 
             if(i==animList.length-1){
@@ -161,6 +170,8 @@ function init()
     clearScreen();
     array = [];
     generateRandomArray(array, arraySize, minVal, maxVal);
+    placed = [];
+    generateRandomArray(placed,arraySize,0,0);
     copyArray = [...array];
     animList = [];
     drawRectangles();
@@ -175,6 +186,8 @@ function start(){
 
 
     animList = [];
+    placed = [];
+    generateRandomArray(placed,arraySize,0,0);
 
     var cntr = 1;
 
@@ -310,6 +323,8 @@ stopButton.click(function(){
 
 shuffle.click(function(){
     shuffleArray(array,arraySize);
+    placed = [];
+    generateRandomArray(placed,arraySize,0,0);
     clearScreen();
     drawRectangles();
     copyArray = [...array];

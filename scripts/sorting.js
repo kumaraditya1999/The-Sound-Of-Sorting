@@ -20,6 +20,9 @@ export function insertionSort(animList, arr, n){
         }
     }
 
+    for( var i = n-1; i >=0; i--)
+        insert(animList,"comp",i,i,arr[i],i);  
+
 }
 
 // selection sort
@@ -27,7 +30,7 @@ export function insertionSort(animList, arr, n){
 export function selectionSort(animList, arr, n)  
 {  
     
-    var i, j, min_idx;  
+    var i, j, min_idx; 
 
     for (i = 0; i < n-1; i++)  
     {  
@@ -42,9 +45,11 @@ export function selectionSort(animList, arr, n)
             }   
         }
         
-        insert(animList,"swap",i,min_idx, arr[i]-arr[min_idx]);
+        insert(animList,"swap",i,min_idx, arr[i]-arr[min_idx],i);
         [arr[min_idx], arr[i]] = swap(arr[min_idx], arr[i]);
     }
+
+    insert(animList,"swap",n-1,n-1, 0,n-1);
 }  
 
 // bubblesort
@@ -65,8 +70,10 @@ export function bubbleSort(animList, arr,n)
                 insert(animList,"comp",j,j+1,arr[j]-arr[j+1]);
             } 
 
-        }  
-    }      
+        }
+        insert(animList,"comp",n-i-1,n-i-1,0,n-i-1);  
+    } 
+    insert(animList,"comp",0,0,0,0);     
         
 }  
 
@@ -80,6 +87,12 @@ function merge(animList, arr, l, m, r)
   
     let L = [];
     let R = []; 
+
+    let lastPiece = 0;
+
+    if(l==0 && r==arr.length-1){
+        lastPiece = 1;
+    }
 
     for (i = 0; i < n1; i++) 
         L.push(arr[l + i]); 
@@ -98,6 +111,8 @@ function merge(animList, arr, l, m, r)
             insert(animList,"rep",k,L[i],arr[k]-L[i]);
             insert(animList,"comp",k,l+i,arr[k]-L[i]);
             arr[k] = L[i];
+            if(lastPiece)
+                insert(animList,"comp",k,k,arr[k],k);
             i++; 
         } 
         else
@@ -105,6 +120,8 @@ function merge(animList, arr, l, m, r)
             insert(animList,"rep",k,R[j],arr[k]-R[j]);
             insert(animList,"comp",k,m+1+j,arr[k]-R[j]);
             arr[k] = R[j]; 
+            if(lastPiece)
+                insert(animList,"comp",k,k,arr[k],k);
             j++; 
         } 
         k++; 
@@ -115,6 +132,8 @@ function merge(animList, arr, l, m, r)
         insert(animList,"rep",k,L[i],arr[k]-L[i]);
         insert(animList,"comp",k,l+i,arr[k]-L[i]);
         arr[k] = L[i]; 
+        if(lastPiece)
+                insert(animList,"comp",k,k,arr[k],k);
         i++; 
         k++; 
     } 
@@ -124,6 +143,8 @@ function merge(animList, arr, l, m, r)
         insert(animList,"rep",k,R[j],arr[k]-R[j]);
         insert(animList,"comp",k,m+1+j,arr[k]-R[j]);
         arr[k] = R[j];
+        if(lastPiece)
+                insert(animList,"comp",k,k,arr[k],k);
         j++;
         k++; 
     } 
@@ -187,10 +208,13 @@ export function quickSort(animList, arr, arraySize, low, high)
     
     if (low < high) {   
         var pi = partition_r(animList, arr, low, high);
-        quickSort(animList, arr, arraySize, low, pi - 1); 
+        insert(animList,"comp",pi,pi,arr[pi],pi);
+        quickSort(animList, arr, arraySize, low, pi - 1);
         quickSort(animList, arr, arraySize, pi + 1, high); 
+    }else if(low==high) {
+        insert(animList,"comp",low,low,arr[low],low);
     } 
-} 
+}
 
 // heapsort
 
@@ -225,7 +249,8 @@ export function heapSort(animList, arr, n)
     for (let i=n-1; i>=0; i--) 
     { 
         insert(animList,"swap",0,i,arr[0]-arr[i]); 
-        [arr[0],arr[i]] = swap(arr[0], arr[i]); 
+        [arr[0],arr[i]] = swap(arr[0], arr[i]);
+        insert(animList,"comp",i,i,arr[i],i); 
   
         heapify(animList,arr, i, 0); 
     } 

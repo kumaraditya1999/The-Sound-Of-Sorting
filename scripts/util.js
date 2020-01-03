@@ -6,18 +6,19 @@ export function swap(a, b){
 
 export class Anim
 {
-    constructor(type,fi,si,diff)
+    constructor(type,fi,si,diff,pl)
     {
         this.type = type;
         this.fi = fi;
         this.si = si;
         this.diff = Math.abs(diff);
+        this.pl = pl;
     }
 }
 
-export function insert(animList,type,fi,si,diff)
+export function insert(animList,type,fi,si,diff,pl)
 {
-    let temp = new Anim(type,fi,si,diff);
+    let temp = new Anim(type,fi,si,diff,pl);
     animList.push(temp);
 }
 

@@ -3,21 +3,21 @@ import {swap, generateRandomArray, shuffleArray} from './scripts/util.js';
 
 // constants
 const height = 800;
-const width = 800;
+const width = 900;
 const colors = {    
     "comp": "red",
     "normal": "pink",
     "clear": "white",
     "placed": "purple",
     "swap": "red",
-    "rep": "pink"
+    "rep": "violet"
 };
 
 
 const minVal = 5;
 const maxVal = height - minVal;
 const maxDiff = maxVal - minVal;
-const gap = 1.5;
+const gap = 1;
 const minFreq = 440;
 const maxFreq = 15000;
 
@@ -45,6 +45,8 @@ const shuffle = $("#shuffle");
 const menu = $("#algorithmMenu");
 const error = $("#error-text");
 const oscillator = $("#oscillator");
+const noOfElements = $("#noOfElements");
+const speedOfAnimation = $("#speedOfAnimation");
 
 // the array setup
 
@@ -60,7 +62,7 @@ var timeoutList = [];
 
 function getFrequency(diff){
 
-    return Math.floor((diff/Math.pow(maxDiff,1)) * (maxFreq - minFreq)) + minFreq;
+    return Math.floor((diff/maxDiff) * (maxFreq - minFreq)) + minFreq;
     
 }
 
@@ -146,7 +148,7 @@ function animate(animList,osc)
                 placed[animList[i].pl] = 1;
             }
 
-            osc.frequency.setValueAtTime(getFrequency( Math.pow(animList[i].diff,1) ),(i)*animTime/1000);
+            osc.frequency.setValueAtTime(getFrequency( animList[i].diff ),(i)*animTime/1000);
 
             if(i==animList.length-1){
                 clearScreen();
@@ -167,6 +169,9 @@ function init()
     arraySize = Number(sizeBar[0].value);
     barWidth = (width -  (gap)* (arraySize +1 ))/arraySize;
     animTime = getSpeed(Number(speedBar[0].value));
+
+    noOfElements[0].innerText = sizeBar[0].value;
+    speedOfAnimation[0].innerText = Math.ceil(100/animTime) + " ops";
 
     clearScreen();
     array = [];
@@ -220,11 +225,18 @@ function start(){
             console.log("Heap Sort");
             sorting.heapSort(animList, copyArray, arraySize);
             break;
+        case "Radix Sort":
+            console.log("Radix Sort");
+            sorting.radixSort(animList, copyArray, arraySize);
+            break;
+        case "Count Sort":
+            console.log("Count Sort");
+            sorting.countSort(animList, copyArray, arraySize);
+            break;
         default:
             cntr=0;
             enableButtons();
             
-        
     }
 
         if(cntr)
@@ -310,6 +322,7 @@ sizeBar.on('input',function(){
 
 speedBar.on('input', function(){
     animTime = getSpeed(Number(speedBar[0].value));
+    speedOfAnimation[0].innerText = 1000/animTime + " ops";
 });
 
 stopButton.click(function(){
@@ -334,8 +347,3 @@ shuffle.click(function(){
 
 init();
 
-
-
-/* TODO:
-4. Completed marker
-*/

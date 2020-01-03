@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" href="main.css">
-    <title>The Sound of Sorting Visualiser</title>
+    <title>The Sound Of Sorting</title>
   </head>
 
   <body>
@@ -39,6 +39,8 @@
                 <option>Merge Sort</option>
                 <option>Quick Sort</option>
                 <option>Heap Sort</option>
+                <option>Radix Sort</option>
+                <option>Count Sort</option>
               </select>
               <div class="input-group-append">
                 <button class="btn btn-success" type="button" id="start">Start</button>
@@ -53,15 +55,15 @@
 
           <li class="nav-item">
             <div class="form-group">
-              <label for="speed"><b>Speed Of Animation</b></label>
+              <label for="speed"><b>Speed Of Animation: </b><span id="speedOfAnimation"></span></label>
               <input type="range" min="5" max="200" value="200" class="slider" id="speed" width="100%">
             </div>
           </li>
 
           <li class="nav-item">
             <div class="form-group">
-              <label for="size"><b>Number of Elements</b></label>
-              <input type="range" min="10" max="200" value="100" class="slider" id="size">
+              <label for="size"><b>Number of Elements: </b> <span id="noOfElements"></span></label>
+              <input type="range" min="10" max="250" value="100" class="slider" id="size">
             </div>
           </li>
 

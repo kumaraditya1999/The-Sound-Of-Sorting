@@ -255,3 +255,94 @@ export function heapSort(animList, arr, n)
         heapify(animList,arr, i, 0); 
     } 
 } 
+
+// Radix Sort
+
+function countSortR(animList, arr, n, exp, final) 
+{ 
+    let output = [];
+    for( let i = 0; i < n ; i++)
+        output.push(0);
+
+    let i;
+    let count = [];
+    
+    for(i = 0; i < 10; i++)
+        count.push(0);
+  
+
+    for (i = 0; i < n; i++) 
+        count[ Math.floor(arr[i]/exp)%10 ]++; 
+  
+    for (i = 1; i < 10; i++) 
+        count[i] += count[i - 1]; 
+  
+    for (i = n - 1; i >= 0; i--) 
+    { 
+        insert(animList,"comp",i, count[ Math.floor(arr[i]/exp)%10 ] - 1,arr[i]-output[count[ Math.floor(arr[i]/exp)%10 ] - 1]);
+        output[count[ Math.floor(arr[i]/exp)%10 ] - 1] = arr[i]; 
+        count[ Math.floor(arr[i]/exp)%10 ]--;
+    } 
+  
+    for (i = 0; i < n; i++)
+    {   
+        if(final)
+            insert(animList,"rep",i,output[i],arr[i]-output[i],i);
+        else
+            insert(animList,"rep",i,output[i],arr[i]-output[i]);
+
+        arr[i] = output[i];  
+    }
+        
+} 
+  
+export function radixSort(animList,arr, n) 
+{ 
+    var m = Math.max(...arr);
+    let final = 0;
+  
+    for (let exp = 1; Math.floor(m/exp) > 0; exp *= 10)
+    {   
+        if(Math.floor(m/(exp*10))<=0)
+            final = 1;
+        countSortR(animList, arr, n, exp, final);
+    }
+        
+}
+
+// Count Sort
+
+export function countSort(animList, arr, n) 
+{ 
+    let max = Math.max(...arr);
+    let min = Math.min(...arr);
+    let range = max-min+1;
+
+    let count = [];
+    for(let i = 0; i < range; i++)
+        count.push(0);
+    
+    let output = [];
+    for(let i = 0; i < n; i++)
+        output.push(0);
+
+    for(let i = 0; i < n; i++) 
+        count[arr[i]-min]++; 
+          
+    for(let i = 1; i < range; i++) 
+        count[i] += count[i-1]; 
+    
+    for(let i = n-1; i >= 0; i--) 
+    {  
+        insert(animList,"comp",i,count[arr[i]-min] -1,output[ count[arr[i]-min] -1 ] - arr[i]);
+        output[ count[arr[i]-min] -1 ] = arr[i];  
+        count[arr[i]-min]--;  
+    } 
+      
+    for(let i=0; i < n; i++) 
+    {
+        insert(animList,"rep",i,output[i],output[i] - arr[i],i);
+        arr[i] = output[i]; 
+    }
+            
+} 

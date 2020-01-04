@@ -59,7 +59,7 @@ var animList = [];
 var placed = [];
 
 // the audio setup
-var audioCtx = new AudioContext();
+var audioCtx;
 var osc;
 var timeoutList = [];
 
@@ -220,7 +220,7 @@ function init()
 {   
     arraySize = Number(sizeBar[0].value);
     barWidth = Math.floor((width -  (gap)* (arraySize +1 ))/arraySize);
-    animTime = getSpeed(Number(speedBar[0].value));
+    animTime = getSpeed();
     offset  = Math.round((width -  barWidth*arraySize - gap*(arraySize-1))/2);
 
     if(width <= 640){
@@ -233,7 +233,7 @@ function init()
     }
 
     noOfElements[0].innerText = sizeBar[0].value;
-    speedOfAnimation[0].innerText = Math.ceil(100/animTime) + " ops";
+    speedOfAnimation[0].innerText = animTime +"ms per op";
 
     clearScreen();
     array = [];
@@ -440,7 +440,7 @@ sizeBar.on('input',function(){
 
 speedBar.on('input', function(){
     animTime = getSpeed(Number(speedBar[0].value));
-    speedOfAnimation[0].innerText = Math.round(1000/animTime) + " ops";
+    speedOfAnimation[0].innerText = speedOfAnimation[0].innerText = animTime +"ms per op";
 });
 
 stopButton.click(function(){

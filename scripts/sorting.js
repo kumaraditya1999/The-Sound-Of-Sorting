@@ -667,3 +667,55 @@ export function cycleSort(animList, arr, n)
     }
 
 }
+
+// Bitnoic Sort (doesn't work when n is not power of 2)
+
+function compAndSwap(animList, arr, i, j,dir) 
+{   
+
+    if (dir==(arr[i]>arr[j]))
+    {   
+        insert(animList,"swap",i,j,arr[i]-arr[j]);
+        [arr[i],arr[j]] = swap(arr[i],arr[j]);
+    }else{
+        insert(animList,"comp",i,j,arr[i]-arr[j]);
+    }
+         
+} 
+  
+function bitonicMerge(animList, arr, low, cnt, dir,cntr) 
+{   
+
+    if (cnt>1) 
+    { 
+        let k = Math.floor(cnt/2); 
+        for (let i=low; i<low+k; i++) 
+            compAndSwap(animList,arr, i, i+k,dir,dir&&cntr); 
+        bitonicMerge(animList, arr, low, k,dir,dir&&cntr); 
+        bitonicMerge(animList, arr, low+k, k,dir,dir&&cntr); 
+    }else if(cntr){
+        insert(animList,"comp",low,low,arr[low],low);
+    }
+} 
+  
+export function bitonicSort(animList, arr, low, cnt, dir) 
+{   
+    let cntr=0;
+    if(cnt==undefined)
+    {
+        cnt = low;
+        dir = 1;
+        low = 0;
+        cntr=1;
+    }
+    if (cnt>1) 
+    { 
+        let k =Math.floor(cnt/2); 
+        bitonicSort(animList, arr, low, k, 1); 
+        bitonicSort(animList, arr, low+k, k, 0); 
+        bitonicMerge(animList, arr,low, cnt, dir,cntr); 
+    }
+
+
+
+} 

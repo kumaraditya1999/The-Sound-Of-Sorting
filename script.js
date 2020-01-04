@@ -1,5 +1,5 @@
 import * as sorting from './scripts/sorting.js';
-import {swap, generateRandomArray, shuffleArray} from './scripts/util.js';
+import {swap, generateRandomArray, shuffleArray, makePowerOf2} from './scripts/util.js';
 
 // constants
 const width = Math.ceil(window.innerWidth * .80);
@@ -49,6 +49,7 @@ const error = $("#error-text");
 const oscillator = $("#oscillator");
 const noOfElements = $("#noOfElements");
 const speedOfAnimation = $("#speedOfAnimation");
+const bitonicText = $("#bitonicText");
 
 // the array setup
 
@@ -194,6 +195,27 @@ function animate(animList,osc)
     }
 }
 
+function recalcuate()
+{
+    arraySize = array.length;
+    barWidth = Math.floor((width -  (gap)* (arraySize +1 ))/arraySize);
+    offset  = Math.round((width -  barWidth*arraySize - gap*(arraySize-1))/2);
+
+    if(width <= 640){
+        // for small screen
+        gap=0;
+        barWidth = (width -  (gap)* (arraySize +1 ))/arraySize;
+        offset=0;
+    }else{
+        gap=1;
+    }
+
+    noOfElements[0].innerText = arraySize;
+
+    clearScreen();
+    drawRectangles();
+}
+
 function init()
 {   
     arraySize = Number(sizeBar[0].value);
@@ -301,6 +323,12 @@ function start(){
             console.log("Cycle Sort");
             sorting.cycleSort(animList, copyArray, arraySize);
             break;
+        case "Bitonic Sort":
+            console.log("Bitonic Sort");
+            makePowerOf2(array, copyArray,arraySize, minVal, maxVal);
+            recalcuate();
+            sorting.bitonicSort(animList, copyArray, arraySize);
+            break;
         default:
             cntr=0;
             enableButtons();
@@ -374,6 +402,15 @@ function enableButtons()
     stopButton.attr("disabled",true);
     stopButton.addClass("disabled");
 }
+
+menu.change(function(){
+    if(menu[0].value == "Bitonic Sort")
+    {
+        bitonicText.removeClass("no-display");
+    }else{
+        bitonicText.addClass("no-display");
+    }
+});
 
 generateButton.click(function(){
     init();

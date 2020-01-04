@@ -45,3 +45,14 @@ export function shuffleArray(arr, arraySize)
         [arr[i],arr[temp]] = swap(arr[i],arr[temp]);
     }
 }
+
+export function makePowerOf2(arr, copyArray, arraySize, minVal, maxVal)
+{   
+    // console.log(arraySize);
+    while((arr.length & (arr.length - 1)))
+    {   
+        let rval = generateRandomValues(minVal,maxVal);
+        arr.push(rval);
+        copyArray.push(rval);
+    }
+}

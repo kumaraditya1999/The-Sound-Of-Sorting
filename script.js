@@ -233,7 +233,7 @@ function init()
     }
 
     noOfElements[0].innerText = sizeBar[0].value;
-    speedOfAnimation[0].innerText = animTime +"ms per op";
+    speedOfAnimation[0].innerText = animTime*10 +"ms per op (exp.)";
 
     clearScreen();
     array = [];
@@ -440,7 +440,7 @@ sizeBar.on('input',function(){
 
 speedBar.on('input', function(){
     animTime = getSpeed(Number(speedBar[0].value));
-    speedOfAnimation[0].innerText = speedOfAnimation[0].innerText = animTime +"ms per op";
+    speedOfAnimation[0].innerText = animTime*10 +"ms per op (exp.)";
 });
 
 stopButton.click(function(){

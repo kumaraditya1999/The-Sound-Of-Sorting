@@ -48,7 +48,14 @@ export function shuffleArray(arr, arraySize)
 
 export function makePowerOf2(arr, copyArray, arraySize, minVal, maxVal)
 {   
-    // console.log(arraySize);
+    if(arr.length > 256)
+    {
+        while((arr.length & (arr.length - 1)))
+        {   
+            arr.pop();
+            copyArray.pop();
+        }
+    }
     while((arr.length & (arr.length - 1)))
     {   
         let rval = generateRandomValues(minVal,maxVal);

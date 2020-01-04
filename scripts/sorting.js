@@ -716,6 +716,102 @@ export function bitonicSort(animList, arr, low, cnt, dir)
         bitonicMerge(animList, arr,low, cnt, dir,cntr); 
     }
 
+}
 
+// Gnome Sort
 
+export function gnomeSort(animList, arr, n) 
+{ 
+    let index = 0; 
+  
+    while (index < n) { 
+        if (index == 0) 
+            index++; 
+        if (arr[index] >= arr[index - 1]){
+            insert(animList,"comp",index,index-1,arr[index]-arr[index-1]);
+            index++;
+        }
+        else {
+            insert(animList, "swap",index,index-1,arr[index]-arr[index-1]);
+            [arr[index],arr[index-1]] = swap(arr[index], arr[index - 1]); 
+            index--; 
+        } 
+    } 
+
+    for( var i = n-1; i >=0; i--)
+        insert(animList,"comp",i,i,arr[i],i);
+
+}
+
+// Function to implement stooge sort 
+export function stoogeSort(animList, arr, l, h) 
+{   
+    let ctr = 0;
+    if(h==undefined)
+    {
+        h = l - 1;
+        l = 0;
+        ctr=1;
+    }
+
+    if (l >= h) 
+        return; 
+  
+
+    if (arr[l] > arr[h]){
+        insert(animList, "swap", l, h, arr[l]-arr[h]);
+        [arr[l],arr[h]] = swap(arr[l], arr[h]);
+    }else{
+        insert(animList, "comp", l, h, arr[l]-arr[h]);
+    }
+         
+    if (h - l + 1 > 2) { 
+        let t = Math.floor((h - l + 1) / 3); 
+        stoogeSort(animList, arr, l, h - t); 
+        stoogeSort(animList, arr, l + t, h); 
+        stoogeSort(animList, arr, l, h - t); 
+    }
+
+    if(ctr)
+        for( var i = 0; i <= h; i++)
+            insert(animList,"comp",i,i,arr[i],i);   
+}
+
+// Odd Even Sort
+
+export function oddEvenSort(animList, arr, n) 
+{ 
+    let isSorted = false;
+  
+    while (!isSorted) 
+    { 
+        isSorted = true; 
+  
+        for (let i=1; i+1<n; i=i+2) 
+        { 
+            if (arr[i] > arr[i+1]) 
+            {   
+                insert(animList,"swap",i,i+1,arr[i]-arr[i+1]);
+                [arr[i], arr[i+1]] = swap(arr[i], arr[i+1]); 
+                isSorted = false; 
+            }  
+        } 
+   
+        for (let i=0; i+1<n; i=i+2) 
+        { 
+            if (arr[i] > arr[i+1]) 
+            {   
+                insert(animList,"swap",i,i+1,arr[i]-arr[i+1]);
+                [arr[i],arr[i+1]] = swap(arr[i], arr[i+1]); 
+                isSorted = false; 
+            } 
+        } 
+    }
+
+    for(let i = 1; i < n; i+=2)
+        insert(animList,"comp",i,i,arr[i],i);
+    
+    for(let i = 0; i < n; i+=2)
+        insert(animList,"comp",i,i,arr[i],i);
+  
 } 

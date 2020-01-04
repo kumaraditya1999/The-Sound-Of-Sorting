@@ -56,3 +56,17 @@ export function makePowerOf2(arr, copyArray, arraySize, minVal, maxVal)
         copyArray.push(rval);
     }
 }
+
+export function check(arr1, arr2)
+{
+    // check if arr2 is a sorted version of arr1 or not
+
+    let arrx = [...arr1];
+    arrx.sort(function(a, b){return a - b});
+
+    for(let i=0;i<arr1.length;i++)
+        if(arrx[i]!=arr2[i])
+            return false;
+    
+    return true;
+}

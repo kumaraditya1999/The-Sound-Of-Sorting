@@ -1,5 +1,5 @@
 import * as sorting from './scripts/sorting.js';
-import {swap, generateRandomArray, shuffleArray, makePowerOf2} from './scripts/util.js';
+import {swap, generateRandomArray, shuffleArray, makePowerOf2, check} from './scripts/util.js';
 
 // constants
 const width = Math.ceil(window.innerWidth * .80);
@@ -328,6 +328,19 @@ function start(){
             makePowerOf2(array, copyArray,arraySize, minVal, maxVal);
             recalcuate();
             sorting.bitonicSort(animList, copyArray, arraySize);
+            break;
+        case "Gnome Sort":
+            console.log("Gnome Sort");
+            sorting.gnomeSort(animList, copyArray, arraySize)
+            console.log(array, copyArray);
+            break;
+        case "Stooge Sort":
+            console.log("Stooge Sort");
+            sorting.stoogeSort(animList, copyArray, arraySize);
+            break;
+        case "Odd Even Sort":
+            console.log("Odd Even Sort");
+            sorting.oddEvenSort(animList, copyArray, arraySize);
             break;
         default:
             cntr=0;

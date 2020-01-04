@@ -593,3 +593,77 @@ export function pancakeSort(animList, arr, n)
         insert(animList, "comp", curr_size-1,curr_size-1,arr[curr_size-1],curr_size-1);
     } 
 }
+
+// Cycle Sort
+
+export function cycleSort(animList, arr, n) 
+{   
+
+    let taken = new Array(n);
+    
+    let pos;
+    for (let cycle_start = 0; cycle_start <= n - 2; cycle_start++) { 
+
+        let item = arr[cycle_start]; 
+  
+        pos = cycle_start; 
+
+        for (let i = cycle_start + 1; i < n; i++) 
+            if (arr[i] < item){
+                pos++;
+                insert(animList,"comp",i,cycle_start,arr[i]-arr[cycle_start]);
+            }
+                
+  
+        if (pos == cycle_start) 
+            continue; 
+  
+        while (item == arr[pos]){
+            pos += 1;
+            if(!taken[pos] || !taken[pos+1])
+            {
+                insert(animList,"comp",pos,pos+1,arr[pos]);
+            }     
+        }
+            
+
+        if (pos != cycle_start) { 
+            taken[pos]=1;
+            insert(animList,"rep",pos,item,item-arr[pos],pos);
+            [item,arr[pos]] = swap(item, arr[pos]);  
+        } 
+  
+        // Rotate rest of the cycle 
+        while (pos != cycle_start) { 
+            pos = cycle_start; 
+  
+            for (let i = cycle_start + 1; i < n; i++) 
+                if (arr[i] < item){
+                    if(!taken[i])
+                    {
+                        insert(animList,"comp",i,cycle_start,arr[i]-arr[cycle_start]);
+                    }
+                    pos += 1;
+                }
+                     
+  
+            while (item == arr[pos]) 
+                pos += 1; 
+  
+            if (item != arr[pos]) { 
+                taken[pos]=1;
+                insert(animList,"rep",pos,item,item-arr[pos],pos);
+                [item,arr[pos]] = swap(item, arr[pos]); 
+            } 
+        } 
+    }
+
+
+    for(let i =0;i<n;i++){
+        if(!taken[i])
+        {
+            insert(animList,"comp",i,i,arr[i],i);   
+        }
+    }
+
+}

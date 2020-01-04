@@ -297,6 +297,10 @@ function start(){
             console.log("Pancake Sort");
             sorting.pancakeSort(animList, copyArray, arraySize);
             break;
+        case "Cycle Sort":
+            console.log("Cycle Sort");
+            sorting.cycleSort(animList, copyArray, arraySize);
+            break;
         default:
             cntr=0;
             enableButtons();
